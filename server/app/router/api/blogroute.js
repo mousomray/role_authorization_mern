@@ -15,6 +15,8 @@ namedRouter.get('singleblog', '/singleblog/:id', UserAuth, blogController.single
 namedRouter.put('updateblog', '/updateblog/:id', uploadImage.single('image'), UserAuth, blogController.updateBlog)
 namedRouter.delete('deleteblog', '/deleteblog/:id', UserAuth, blogController.deleteBlog)
 namedRouter.post('searchPost', '/blogs/search', UserAuth, blogController.searchPost)
+namedRouter.post('addcomment', '/addcomment/:id', UserAuth, blogController.addComment);
+namedRouter.get('showcomment', '/showcomment/:id', UserAuth, blogController.showComment);
 
 
 module.exports = router;   

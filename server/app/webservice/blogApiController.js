@@ -168,6 +168,41 @@ class blogApiController {
         }
     }
 
+    // Add comment for blog
+    async addComment(req, res) {
+        const id = req.params.id;
+        try {
+            const commentData = req.body
+            console.log("Comment data", commentData)
+            const updatedBlog = await BlogRepo.addCommentBlog(id, commentData);
+            res.status(201).json({
+                success: true,
+                message: "Comment added successfully",
+                blog: updatedBlog
+            });
+        } catch (error) {
+            const statusCode = error.name === 'ValidationError' ? 400 : 500;
+            const message = error.name === 'ValidationError'
+                ? { message: "Validation error", errors: Object.values(error.errors).map(err => err.message) }
+                : { message: "Error updating student data" };
+
+            console.error(error);
+            res.status(statusCode).json(message);
+        }
+    }
+
+    // Show comments 
+    async showComment(req, res) {
+        const id = req.params.id;
+        try {
+            const blog = await BlogRepo.oneBlog(id)
+            res.status(200).json({ sucess: true, message: "Comment fetching successfully", blog })
+        } catch (error) {
+            res.status(500).json({ success: false, message: "Error fetching comment", error });
+        }
+    }
+
+
 }
 
 module.exports = new blogApiController();

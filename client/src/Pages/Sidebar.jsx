@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { recentblog } from './apicall'
 import { useQuery } from '@tanstack/react-query';
 import Search from './Search';
@@ -13,7 +14,7 @@ const Sidebar = () => {
 
     const { isLoading, isError, data: mydata } = useQuery({
         queryKey: ["recentdata"],
-        queryFn: recentData
+        queryFn: recentData 
     })
 
     console.log("Amar data..", mydata)
@@ -33,7 +34,7 @@ const Sidebar = () => {
                             <>
                                 <div class="post-item clearfix">
                                     <img src={`${process.env.REACT_APP_BASE_URL}${value?.image}`} alt="" />
-                                    <h4><a href="blog-single.html">{value?.title}</a></h4>
+                                    <h4><Link to={`/blogdetails/${value?._id}`}>{value?.title}</Link></h4>
                                     <time datetime="2020-01-01">{value?.createdAt ? new Date(value?.createdAt).toLocaleDateString() : 'N/A'}</time>
                                 </div>
                             </>

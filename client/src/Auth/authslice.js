@@ -67,6 +67,8 @@ export const AuthSlice = createSlice({
             localStorage.removeItem("token");
             localStorage.removeItem("name");
             localStorage.removeItem("image");
+            localStorage.removeItem("id");
+            localStorage.removeItem("email");
             toast.success("Logout successfully")
             state.Logouttoggle = false
         },
@@ -118,6 +120,8 @@ export const AuthSlice = createSlice({
                     localStorage.setItem("token", payload?.token);
                     localStorage.setItem("name", payload?.data?.name);
                     localStorage.setItem("image", payload?.data?.image);
+                    localStorage.setItem("id", payload?.data?._id);
+                    localStorage.setItem("email", payload?.data?.email);
                     state.Logouttoggle = true;
                     toast.success(`Hi ${payload?.data.name}, ${payload?.message}`);
                 }

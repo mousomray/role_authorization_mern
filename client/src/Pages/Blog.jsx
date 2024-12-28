@@ -65,7 +65,7 @@ const Blog = () => {
                                                     <ul>
                                                         <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="blog-single.html">{value?.author}</a></li>
                                                         <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i> <a href="blog-single.html"><time datetime="2020-01-01">{value?.createdAt ? new Date(value?.createdAt).toLocaleDateString() : 'N/A'}</time></a></li>
-                                                        <li class="d-flex align-items-center"><i class="icofont-comment"></i> <a href="blog-single.html">12 Comments</a></li>
+                                                        <li class="d-flex align-items-center"><i class="icofont-comment"></i> <a href="blog-single.html">{value?.comments.length}</a></li>
                                                     </ul>
                                                 </div>
 
@@ -84,7 +84,7 @@ const Blog = () => {
                                                         </button>
                                                     </div>
                                                     <div class="read-more">
-                                                        <a href="blog-single.html">Read More</a>
+                                                        <Link to={`/blogdetails/${value?._id}`}>Read More</Link>
                                                     </div>
                                                 </div>
 

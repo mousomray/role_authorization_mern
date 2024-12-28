@@ -14,9 +14,11 @@ import Blog from './Pages/Blog';
 import Addblog from './Pages/Addblog';
 import Editblog from './Pages/Editblog';
 import Verifyotp from './Pages/Verifyotp';
-
-
-
+import Blogdetails from './Pages/Blogdetails';
+import Emailverify from './Pages/Emailverify';
+import Forgetpassword from './Pages/Forgetpassword';
+import Updatepassword from './Pages/Updatepassword';
+import Dashboard from './Pages/Dashboard';
 
 const App = () => {
 
@@ -47,6 +49,18 @@ const App = () => {
     {
       path: '/editblog/:id',
       component: <Editblog />
+    },
+    {
+      path: '/blogdetails/:id',
+      component: <Blogdetails />
+    },
+    {
+      path: '/updatepassword',
+      component: <Updatepassword />
+    },
+    {
+      path: '/dashboard',
+      component: <Dashboard />
     }
   ]
 
@@ -66,6 +80,14 @@ const App = () => {
     {
       path: '/verifyotp',
       component: <Verifyotp />
+    },
+    {
+      path: '/emailverify',
+      component: <Emailverify />
+    },
+    {
+      path: '/forgetpassword/:id/:token',
+      component: <Forgetpassword />
     }
   ]
 

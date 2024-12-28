@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { searchblog } from './apicall';
 import { useForm } from "react-hook-form"; // Import React Hook Form
 
-const Search = () => {
+const Search = () => { 
 
     const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();
     const [search, setSearch] = useState([]);
@@ -39,7 +40,7 @@ const Search = () => {
                         <>
                             <div class="post-item clearfix">
                                 <img src={`${process.env.REACT_APP_BASE_URL}${value?.image}`} alt="" style={{ height: '50px' }} />
-                                <h4><a href="blog-single.html">{value?.title}</a></h4>
+                                <h4><Link to={`/blogdetails/${value?._id}`}>{value?.title}</Link></h4>
                             </div>
                         </>
                     )

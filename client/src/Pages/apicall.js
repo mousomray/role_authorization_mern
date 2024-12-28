@@ -6,7 +6,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // Fetching dashboard 
 export const fetchDashboard = async () => {
     try {
-        const apiurl = myendpoints[2];
+        const apiurl = myendpoints[15];
         const response = await axiosInstance.get(apiurl);
         console.log("Fetching dashboard data...", response);
         return response?.data?.user
@@ -153,10 +153,38 @@ export const verifyotp = async (data) => {
     }
 }
 
-// Forget Password 
-export const forgetpassword = async (data) => {
+// Update Password 
+export const updatepassword = async (data) => {
     try {
-        const apiurl = myendpoints[6];
+        const apiurl = myendpoints[14];
+        const response = await axiosInstance.post(apiurl, data);
+        console.log("Fetching update data...", response);
+        toast.success(response?.data?.message);
+        return response
+    } catch (error) {
+        console.log("Error fetching update data", error);
+        toast.error(error?.response?.data?.message);
+    }
+}
+
+// Reset link for forget password 
+export const resetpasswordlink = async (data) => {
+    try {
+        const apiurl = myendpoints[12];
+        const response = await axiosInstance.post(apiurl, data);
+        console.log("Fetching email verify data...", response);
+        toast.success(response?.data?.message);
+        return response
+    } catch (error) {
+        console.log("Error fetching email verify data", error);
+        toast.error(error?.response?.data?.message);
+    }
+}
+
+// Forget Password 
+export const forgetpassword = async (data, id, token) => {
+    try {
+        const apiurl = `${myendpoints[13]}/${id}/${token}`;
         const response = await axiosInstance.post(apiurl, data);
         console.log("Fetching forget data...", response);
         toast.success(response?.data?.message);
@@ -167,17 +195,29 @@ export const forgetpassword = async (data) => {
     }
 }
 
-// Update Password 
-export const updatepassword = async (data) => {
+// Show comment 
+export const showcomment = async (id) => {
     try {
-        const apiurl = myendpoints[7];
+        const apiurl = `${myendpoints[10]}/${id}`;
+        const response = await axiosInstance.get(apiurl);
+        console.log("Fetching show comment data...", response);
+        return response?.data?.blog?.comments
+    } catch (error) {
+        console.log("Error fetching show comment data", error);
+    }
+}
+
+// Add comment 
+export const addcomment = async (data, id) => {
+    try {
+        const apiurl = `${myendpoints[11]}/${id}`;
         const response = await axiosInstance.post(apiurl, data);
-        console.log("Fetching update data...", response);
+        console.log("Fetching add comment data...", response);
         toast.success(response?.data?.message);
         return response
     } catch (error) {
-        console.log("Error fetching update data", error);
-        toast.error(error?.response?.data?.message);
+        console.log("Error fetching add comment data", error);
+        toast.error(error?.response?.data?.errors[0]);
     }
 }
 

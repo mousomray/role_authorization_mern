@@ -3,7 +3,11 @@ export const endpoints = {
     auth: {
         register: "auth/signup",
         login: "auth/signin",
-        verify: "auth/verifyotp",
+        otpverify: "auth/verifyotp",
+        emailverify: "auth/emailverify",
+        forgetpassword: "auth/forgetpassword",
+        updatepassword: "auth/updatepassword",
+        dashboard: "auth/dashboard"
     },
 
     cms: {
@@ -13,7 +17,9 @@ export const endpoints = {
         updateblog: "api/updateblog",
         deleteblog: "api/deleteblog",
         recentblog: "api/recentblogs",
-        search: "api/blogs/search"
+        search: "api/blogs/search",
+        showcomment: "api/showcomment",
+        addcomment: "api/addcomment"
     },
 
 }
@@ -26,7 +32,13 @@ export const myendpoints = [
     endpoints.cms.singleblog, //Index number 4
     endpoints.cms.updateblog, //Index number 5
     endpoints.cms.deleteblog, //Index number 6
-    endpoints.auth.verify, //Index number 7
+    endpoints.auth.otpverify, //Index number 7
     endpoints.cms.recentblog, //Index number 8
     endpoints.cms.search, //Index number 9
+    endpoints.cms.showcomment, // Index number 10
+    endpoints.cms.addcomment, // Index number 11
+    endpoints.auth.emailverify, // Index number 12
+    endpoints.auth.forgetpassword, // Index number 13
+    endpoints.auth.updatepassword, // Index number 14
+    endpoints.auth.dashboard // Index number 15
 ]

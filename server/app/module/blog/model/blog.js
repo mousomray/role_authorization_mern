@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const CommentSchema = require('./comment');
 const Schema = mongoose.Schema;
 
 const BlogSchema = new Schema({
@@ -24,7 +25,8 @@ const BlogSchema = new Schema({
     author: {
         type: String,
         required: "Author is required"
-    }
+    },
+    comments: [CommentSchema] // Import comment schema for to show comment 
 }, { timestamps: true });
 
 const BlogModel = mongoose.model('blog', BlogSchema);

@@ -51,6 +51,13 @@ class BlogRepo {
     async deleteBlog(id) {
         return await BlogModel.findByIdAndDelete(id);
     }
+
+    // Add comment mongo
+    async addCommentBlog(id, commentData) {
+        const blog = await BlogModel.findById(id);
+        blog.comments.push(commentData);
+        return blog.save();
+    }
 }
 
 module.exports = new BlogRepo();

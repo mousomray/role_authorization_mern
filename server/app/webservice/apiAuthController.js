@@ -1,6 +1,7 @@
 const AuthRepo = require('../module/auth/repository/authrepo');
 const { comparePassword } = require('../middleware/user_auth/auth');
 const userOTPverify = require('../helper/userOTPverify');
+const transporter = require('../config/emailtransporter')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -177,6 +178,138 @@ class apiAuthController {
 
     }
 
+    // Update Password post 
+    async updatepassword(req, res) {
+        try {
+            const userId = req.user._id; // Get user ID from token
+            const { oldPassword, newPassword, confirmPassword } = req.body;
+            if (!oldPassword || !newPassword || !confirmPassword) {
+                return res.status(400).json({
+                    message: "All fields are required"
+                });
+            }
+            if (newPassword.length < 8) {
+                return res.status(400).json({
+                    message: "New password should be at least 8 characters long"
+                });
+            }
+            if (newPassword !== confirmPassword) {
+                return res.status(400).json({
+                    message: "Password do not match"
+                });
+            }
+            const user = await AuthRepo.findById(userId)
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            const isMatch = comparePassword(oldPassword, user.password);
+            if (!isMatch) {
+                return res.status(400).json({ message: "Old password is incorrect" });
+            }
+            const salt = bcrypt.genSaltSync(10);
+            const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+            user.password = hashedNewPassword;
+            await user.save();
+            res.status(200).json({ success: true, message: "Password updated successfully" });
+        } catch (error) {
+            console.error("Error updating password:", error);
+            res.status(500).json({ message: "Server error" });
+        }
+    }
+
+
+    // Email verify 
+    async emailVerify(req, res) {
+        try {
+            const { email } = req.body;
+            if (!email) {
+                return res.status(400).json({ status: false, message: "Email field is required" });
+            }
+            const user = await AuthRepo.findByEmail(email);
+            if (!user) {
+                return res.status(404).json({ status: false, message: "Email doesn't exist" });
+            }
+            // Generate token for password reset
+            const secret = user._id + process.env.USER_API_KEY;
+            const token = jwt.sign({ userID: user._id }, secret, { expiresIn: '5m' });
+            console.log("My forget token...", token)
+            // Reset Link and this link generate by frontend developer
+            // FRONTEND_HOST_FORGETPASSWORD = http://localhost:3004/forgetpassword
+            const resetLink = `${process.env.FRONTEND_HOST_FORGETPASSWORD}/${user._id}/${token}`;
+            // Send password reset email  
+            await transporter.sendMail({
+                from: process.env.EMAIL_FROM,
+                to: user.email,
+                subject: "Password Reset Link",
+                // html: `<p>Hello ${user.name},</p><p>Please <a href="${resetLink}">Click here</a> to reset your password.</p>`
+                html: 'Your email is sucessfully verified'
+            });
+            // Send success response
+            res.status(200).json({ status: true, message: "Your email is verified", user, token });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ status: false, message: "Unable to send password reset email. Please try again later." });
+
+        }
+    }
+
+    async forgetPassword(req, res) {
+        try {
+            const { id, token } = req.params;
+            const { password, confirmPassword } = req.body;
+            const user = await AuthRepo.findById(id)
+            console.log("My user...", user)
+            if (!user) {
+                return res.status(404).json({ status: false, message: "User not found" });
+            }
+            // Validate token check 
+            const new_secret = user._id + process.env.USER_API_KEY;
+            jwt.verify(token, new_secret);
+
+            if (!password || !confirmPassword) {
+                return res.status(400).json({ status: false, message: "New Password and Confirm New Password are required" });
+            }
+
+            if (password.length < 8) {
+                return res.status(400).json({ status: false, message: "Password should be atleast 8 characters long" });
+            }
+
+            if (password !== confirmPassword) {
+                return res.status(400).json({ status: false, message: "New Password and Confirm New Password don't match" });
+            }
+            // Generate salt and hash new password
+            const salt = await bcrypt.genSalt(10);
+            const newHashPassword = await bcrypt.hash(password, salt);
+
+            // Update user's password
+            await AuthRepo.findByIdHashpassword(user._id, newHashPassword);
+
+            // Send success response
+            res.status(200).json({ status: "success", message: "Password reset successfully" });
+
+        } catch (error) {
+            console.log("Error updating password...", error)
+            return res.status(500).json({ status: "failed", message: "Unable to reset password. Please try again later." });
+        }
+    }
+
+    // Fetching Dashboard Data 
+    async dashboard(req, res) {
+        try {
+            const user = req.user;
+            if (!user) {
+                return res.status(401).json({ message: "Unauthorized access. No user information found." });
+            }
+            console.log("User Data:", user);
+            res.status(200).json({
+                message: "Welcome to the user dashboard",
+                user: user
+            });
+        } catch (error) {
+            console.error("Server Error:", error.message);
+            res.status(500).json({ message: "Server error" });
+        }
+    };
 
 
 }
