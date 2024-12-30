@@ -90,26 +90,25 @@ const Comment = () => {
 
                 <div class="reply-form">
                     <h4>Post Comment</h4>
-                    <p>Your email address will not be published. Required fields are marked * </p>
                     <form action="POST" onSubmit={handleSubmit(onSubmit)}>
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <input name="name" value={name} readOnly type="text" class="form-control" placeholder="Your Name*" {...register("name")} />
+                                <input name="name" value={name} readOnly type="text" class="form-control" style={{ display: 'none' }} placeholder="Your Name*" {...register("name")} />
                             </div>
                             <div class="col-md-6 form-group">
-                                <input name="email" value={email} readOnly type="email" class="form-control" placeholder="Your Email*" {...register("email")} />
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col form-group">
-                                <input name="image" value={`${process.env.REACT_APP_BASE_URL}${image}`} readOnly class="form-control" placeholder="Your profile pic*" {...register("image")}></input>
+                                <input name="email" value={email} readOnly type="email" class="form-control" style={{ display: 'none' }} placeholder="Your Email*" {...register("email")} />
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col form-group">
                                 <textarea name="message" class="form-control" placeholder="Your Comment*" {...register("message")}></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col form-group">
+                                <input name="image" value={`${process.env.REACT_APP_BASE_URL}${image}`} readOnly style={{ display: 'none' }} class="form-control" {...register("image")}></input>
                             </div>
                         </div>
 

@@ -226,6 +226,8 @@ const Editblog = () => {
                                             }}
                                             autoFocus
                                             {...register("description")}
+                                            multiline
+                                            rows={4}
                                             sx={{
                                                 '& .MuiOutlinedInput-root': {
                                                     '& fieldset': {

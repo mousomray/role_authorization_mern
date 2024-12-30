@@ -85,37 +85,33 @@ class blogApiController {
     // Update Data
     async updateBlog(req, res) {
         try {
-            if (req.user.role === 'admin' || req.user.role === 'manager') {
-                const id = req.params.id;
-                // Deleting image from uploads folder start
-                if (req.file) {
-                    const blog = await BlogRepo.oneBlog(id)
-                    const imagePath = path.resolve(__dirname, '../../', blog.image);
-                    if (fs.existsSync(imagePath)) {
-                        fs.unlink(imagePath, (err) => {
-                            if (err) {
-                                console.error('Error deleting image file:', err);
-                            } else {
-                                console.log('Image file deleted successfully:', blog.image);
-                            }
-                        });
-                    } else {
-                        console.log('File does not exist:', imagePath);
-                    }
+            const id = req.params.id;
+            // Deleting image from uploads folder start
+            if (req.file) {
+                const blog = await BlogRepo.oneBlog(id)
+                const imagePath = path.resolve(__dirname, '../../', blog.image);
+                if (fs.existsSync(imagePath)) {
+                    fs.unlink(imagePath, (err) => {
+                        if (err) {
+                            console.error('Error deleting image file:', err);
+                        } else {
+                            console.log('Image file deleted successfully:', blog.image);
+                        }
+                    });
+                } else {
+                    console.log('File does not exist:', imagePath);
                 }
-                // Deleting image from uploads folder end
-                const updateData = req.body
-                if (req.file) {
-                    updateData.image = req.file.path;
-                }
-                const updatedBlog = await BlogRepo.updateBlog(id, updateData);
-                if (!updatedBlog) {
-                    return res.status(404).json({ message: "Blog not found" });
-                }
-                res.status(200).json({ message: "Blog updated successfully", data: updatedBlog });
-            } else {
-                res.status(400).json({ message: "Admin and Manager can edit blog" })
             }
+            // Deleting image from uploads folder end
+            const updateData = req.body
+            if (req.file) {
+                updateData.image = req.file.path;
+            }
+            const updatedBlog = await BlogRepo.updateBlog(id, updateData);
+            if (!updatedBlog) {
+                return res.status(404).json({ message: "Blog not found" });
+            }
+            res.status(200).json({ message: "Blog updated successfully", data: updatedBlog });
         } catch (error) {
             const statusCode = error.name === 'ValidationError' ? 400 : 500;
             const message = error.name === 'ValidationError'
@@ -130,28 +126,24 @@ class blogApiController {
     // Delete blog
     async deleteBlog(req, res) {
         try {
-            if (req.user.role === 'admin') {
-                // Deleting image from uploads folder start
-                const id = req.params.id
-                const blog = await BlogRepo.oneBlog(id)
-                const imagePath = path.resolve(__dirname, '../../', blog.image);
-                if (fs.existsSync(imagePath)) {
-                    fs.unlink(imagePath, (err) => {
-                        if (err) {
-                            console.error('Error deleting image file:', err);
-                        } else {
-                            console.log('Image file deleted successfully:', blog.image);
-                        }
-                    });
-                } else {
-                    console.log('File does not exist:', imagePath);
-                }
-                // Deleting image from uploads folder end
-                await BlogRepo.deleteBlog(id)
-                res.status(200).json({ message: "Blog deleted successfully" })
+            // Deleting image from uploads folder start
+            const id = req.params.id
+            const blog = await BlogRepo.oneBlog(id)
+            const imagePath = path.resolve(__dirname, '../../', blog.image);
+            if (fs.existsSync(imagePath)) {
+                fs.unlink(imagePath, (err) => {
+                    if (err) {
+                        console.error('Error deleting image file:', err);
+                    } else {
+                        console.log('Image file deleted successfully:', blog.image);
+                    }
+                });
             } else {
-                res.status(400).json({ message: "Only admin can delete Blog" })
+                console.log('File does not exist:', imagePath);
             }
+            // Deleting image from uploads folder end
+            await BlogRepo.deleteBlog(id)
+            res.status(200).json({ message: "Blog deleted successfully" })
         } catch (error) {
             console.log("Eror deleted blog", error);
         }

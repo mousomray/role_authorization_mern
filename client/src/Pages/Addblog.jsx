@@ -172,6 +172,8 @@ const Addblog = () => {
                                             label="Blog Description"
                                             autoFocus
                                             {...register("description")}
+                                            multiline
+                                            rows={4}
                                             sx={{
                                                 '& .MuiOutlinedInput-root': {
                                                     '& fieldset': {

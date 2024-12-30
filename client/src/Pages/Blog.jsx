@@ -9,6 +9,7 @@ import Pagination from '@mui/material/Pagination';
 import { Button } from '@mui/material';
 import { blogList, deleteblog } from './apicall';
 import { useEffect } from 'react';
+import Loader from '../Common/Loader';
 
 const Blog = () => {
 
@@ -32,7 +33,7 @@ const Blog = () => {
     }, [currentPage])
 
     if (loading) {
-        return <h1 style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}>Loading...</h1>
+        return <h1 style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}><Loader /></h1>
     }
 
     console.log("Bloggg", blogdata)
@@ -64,7 +65,7 @@ const Blog = () => {
                                                 <div class="entry-meta">
                                                     <ul>
                                                         <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="blog-single.html">{value?.author}</a></li>
-                                                        <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i> <a href="blog-single.html"><time datetime="2020-01-01">{value?.createdAt ? new Date(value?.createdAt).toLocaleDateString() : 'N/A'}</time></a></li>
+                                                        <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i> <a href="blog-single.html"><time datetime="2020-01-01">{new Date(value?.createdAt).toLocaleDateString('en-GB')}</time></a></li>
                                                         <li class="d-flex align-items-center"><i class="icofont-comment"></i> <a href="blog-single.html">{value?.comments.length}</a></li>
                                                     </ul>
                                                 </div>

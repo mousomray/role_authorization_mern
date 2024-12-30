@@ -14,7 +14,7 @@ const Sidebar = () => {
 
     const { isLoading, isError, data: mydata } = useQuery({
         queryKey: ["recentdata"],
-        queryFn: recentData 
+        queryFn: recentData
     })
 
     console.log("Amar data..", mydata)
@@ -35,7 +35,7 @@ const Sidebar = () => {
                                 <div class="post-item clearfix">
                                     <img src={`${process.env.REACT_APP_BASE_URL}${value?.image}`} alt="" />
                                     <h4><Link to={`/blogdetails/${value?._id}`}>{value?.title}</Link></h4>
-                                    <time datetime="2020-01-01">{value?.createdAt ? new Date(value?.createdAt).toLocaleDateString() : 'N/A'}</time>
+                                    <time datetime="2020-01-01">{new Date(value?.createdAt).toLocaleDateString('en-GB')}</time>
                                 </div>
                             </>
                         )

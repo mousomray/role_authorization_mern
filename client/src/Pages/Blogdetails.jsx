@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Wrapper from '../Common/Wrapper'
 import Sidebar from './Sidebar'
 import Comment from './Comment'
 import { singleblog } from './apicall'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import Loader from '../Common/Loader'
 
 const Blogdetails = () => {
 
   const { id } = useParams();
+  const [visibleword, setVisibleword] = useState(2000);
 
   const getData = async () => {
     const response = await singleblog(id)
@@ -20,8 +22,13 @@ const Blogdetails = () => {
     queryFn: getData
   })
 
+  // Function For Loadmore
+  const handleLoadMore = () => {
+    setVisibleword(prev => prev + 2000);
+  };
+
   if (isLoading) {
-    return <h1 style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}>Loading...</h1>
+    return <h1 style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}><Loader /></h1>
   }
 
   console.log("Single...", singledata)
@@ -50,16 +57,22 @@ const Blogdetails = () => {
                   <div class="entry-meta">
                     <ul>
                       <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="blog-single.html">{singledata?.author}</a></li>
-                      <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i> <a href="blog-single.html"><time datetime="2020-01-01">{singledata?.createdAt ? new Date(singledata?.createdAt).toLocaleDateString() : 'N/A'}</time></a></li>
+                      <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i> <a href="blog-single.html"><time datetime="2020-01-01">{new Date(singledata?.createdAt).toLocaleDateString('en-GB')}</time></a></li>
                       <li class="d-flex align-items-center"><i class="icofont-comment"></i> <a href="blog-single.html">{singledata?.comments.length}</a></li>
                     </ul>
                   </div>
 
                   <div class="entry-content">
                     <p>
-                      Similique neque nam consequuntur ad non maxime aliquam quas. Quibusdam animi praesentium. Aliquam et laboriosam eius aut nostrum quidem aliquid dicta.
-                      Et eveniet enim. Qui velit est ea dolorem doloremque deleniti aperiam unde soluta. Est cum et quod quos aut ut et sit sunt. Voluptate porro consequatur assumenda perferendis dolore.
+                      {singledata?.description?.slice(0, visibleword)}
                     </p>
+                    {visibleword < singledata?.description?.length ? (
+                      <div className="text-center mt-3 mb-3 mx-auto">
+                        <p onClick={handleLoadMore} style={{ color: 'green', cursor: 'pointer' }}>
+                          Read More
+                        </p>
+                      </div>
+                    ) : null}
                   </div>
 
                   <div class="entry-footer clearfix">

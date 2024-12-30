@@ -15,7 +15,7 @@ const UserAuth = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.USER_API_KEY);
     req.user = decoded;
-    console.log('Decord user for admin pannel...', req.user);
+    console.log('Decord user for API...', req.user);
   } catch (err) {
     return res.status(401).send({ messaage: "Invalid Token" });
   }
