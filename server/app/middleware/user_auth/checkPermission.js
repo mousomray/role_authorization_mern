@@ -1,4 +1,4 @@
-const getPermissionsForRole = require('./getPermission')
+const getPermissionsForRole = require('../../config/getPermission')
 
 // Middleware for RBAC
 const checkPermission = (requiredPermissions) => {
